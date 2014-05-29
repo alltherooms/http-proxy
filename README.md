@@ -12,7 +12,8 @@ httpProxy = new HttpProxy({
     enabled: true, //defaults to false (no caching)
     path: "/path/to/cache/dir", //if `enabled` was set to true, this path must be specified, otherwise, an Error will be thrown. 
     ttl: 60000 //cache TTL
-  }
+  },
+  auth: "user:password" //Authorization credentials
 });
 
 httpProxy.listen(8080);
