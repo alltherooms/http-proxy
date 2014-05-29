@@ -1,6 +1,6 @@
 #http-proxy
 
-HTTP proxy with caching functionalities
+HTTP proxy with caching support
 
 ##Usage
 
