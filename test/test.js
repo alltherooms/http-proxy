@@ -2,6 +2,7 @@ var HttpProxy = require("../")
 ,   cachePath = __dirname + "/cache"
 ,   cacheTtl = 1000 * 60 * 10 //10 minutes
 ,   sh = require("execSync")
+,   nock = require("nock")
 ,   request = require("request").defaults({
       proxy: "http://localhost:8080",
       tunnel: false
@@ -9,22 +10,25 @@ var HttpProxy = require("../")
 
 describe("HttpProxy", function () {
   before(function () {
+    //Remove cache directory
+    sh.run("rm -rf " + cachePath);
+
+    //Create cache directory
+    sh.run("mkdir " + cachePath);
+
     //Crate proxy server
     var httpProxy = new HttpProxy({
       cache: {
-        enable: true,
+        enabled: true,
         path: cachePath,
         ttl: cacheTtl
       }
     });
+
     httpProxy.listen(8080);
   });
 
   describe("proxying", function () {
-    beforeEach(function () {
-      sh.run("rm -rf " + cachePath);
-    });
-
     describe("http", function () {
       it("proxies GET requests properly", function (done) {
         request.get("http://httpbin.org/get", function (error, response, body) {
@@ -36,13 +40,6 @@ describe("HttpProxy", function () {
       it("proxies POST requests properly", function (done) {
         request.post({uri: "http://httpbin.org/post", body: "Some random POST data"}, function (error, response, body) {
           expect(JSON.parse(body).data).to.equal("Some random POST data");
-          done();
-        });
-      });
-
-      it("proxies PUT requests properly", function (done) {
-        request.post({uri: "http://httpbin.org/post", body: "Some random PUT data"}, function (error, response, body) {
-          expect(JSON.parse(body).data).to.equal("Some random PUT data");
           done();
         });
       });
@@ -62,13 +59,32 @@ describe("HttpProxy", function () {
           done();
         });
       });
+    });
+  });
 
-      it("proxies PUT requests properly", function (done) {
-        request.post({uri: "https://httpbin.org/post", body: "Some random safe PUT data"}, function (error, response, body) {
-          expect(JSON.parse(body).data).to.equal("Some random safe PUT data");
-          done();
-        });
+  describe("caching", function () {
+    before(function () {
+      nock.disableNetConnect();
+      nock.enableNetConnect("localhost"); //Enable http request to proxy only
+    });
+
+    it("responds the GET request from the cache", function (done) {
+      request.get("http://httpbin.org/get", function (error, response, body) {
+        expect(JSON.parse(body).url).to.equal("http://httpbin.org/get");
+        done();
       });
     });
+
+    it("responds the POST request from the cache", function (done) {
+      request.post({uri: "http://httpbin.org/post", body: "Some random POST data"}, function (error, response, body) {
+        expect(JSON.parse(body).data).to.equal("Some random POST data");
+        done();
+      });
+    });
+  });
+
+  after(function () {
+    //Remove cache directory
+    sh.run("rm -rf " + cachePath);
   });
 });
