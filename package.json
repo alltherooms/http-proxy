@@ -3,7 +3,7 @@
     "name": "Daniel López",
     "email": "danypype@gmail.com"
   },
-  "name": "alltherooms-http-proxy",
+  "name": "http-proxy",
   "description": "AllTheRooms' HTTP proxy with caching functionalities",
   "version": "0.1.0",
   "repository": {
