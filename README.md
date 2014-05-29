@@ -17,3 +17,10 @@ httpProxy = new HttpProxy({
 
 httpProxy.listen(8080);
 ```
+
+##Testing
+
+```bash
+~/http-proxy$ npm install
+~/http-proxy$ npm test
+```
