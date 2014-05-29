@@ -1,6 +1,6 @@
 var HttpProxy = require("../")
 ,   cachePath = __dirname + "/cache"
-,   cacheTtl = 1000 * 60 * 10 //10 minutes
+,   cacheTtl = 1000 * 30 //10 minutes
 ,   sh = require("execSync")
 ,   nock = require("nock")
 ,   request = require("request").defaults({
@@ -78,7 +78,7 @@ describe("HttpProxy", function () {
     it("responds the POST request from the cache", function (done) {
       request.post({uri: "http://httpbin.org/post", body: "Some random POST data"}, function (error, response, body) {
         expect(JSON.parse(body).data).to.equal("Some random POST data");
-        done();
+        //done();
       });
     });
   });
