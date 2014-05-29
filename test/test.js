@@ -82,6 +82,19 @@ describe("HttpProxy", function () {
         done();
       });
     });
+
+    after(function () {
+      nock.enableNetConnect();
+    });
+  });
+
+  describe("authorization", function () {
+    it("responds with 401 (unhautorized) code", function (done) {
+      request.get({uri: "http://httpbin.org/get", proxy: "http://wrong:wrong@localhost:8080"}, function (error, response, body) {
+        expect(response.statusCode).to.equal(401);
+        done();
+      });
+    });
   });
 
   after(function () {
