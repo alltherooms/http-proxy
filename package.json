@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git://github.com/alltherooms/http-proxy.git"
   },
-  "main": "index.js",
+  "main": "./lib/proxy.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha"
   },
