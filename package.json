@@ -1,0 +1,23 @@
+{
+  "author": {
+    "name": "Daniel López",
+    "email": "danypype@gmail.com"
+  },
+  "name": "alltherooms-http-proxy",
+  "description": "AllTheRooms' HTTP proxy with caching functionalities",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/alltherooms/http-proxy.git"
+  },
+  "main": "proxy.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "execSync": "^1.0.1-pre",
+    "mocha": "^1.20.0",
+    "request": "^2.36.0"
+  }
+}
