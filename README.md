@@ -4,7 +4,7 @@ HTTP proxy with caching functionalities
 
 ##Usage
 
-```
+```javascript
 var HttpProxy = require("http-proxy");
 
 httpProxy = new HttpProxy({
