@@ -4,7 +4,7 @@ var HttpProxy = require("../")
 ,   sh = require("execSync")
 ,   nock = require("nock")
 ,   request = require("request").defaults({
-      proxy: "http://localhost:8080",
+      proxy: "http://test:test@localhost:8080",
       tunnel: false
     });
 
@@ -22,7 +22,8 @@ describe("HttpProxy", function () {
         enabled: true,
         path: cachePath,
         ttl: cacheTtl
-      }
+      },
+      auth: "test:test"
     });
 
     httpProxy.listen(8080);
@@ -78,7 +79,7 @@ describe("HttpProxy", function () {
     it("responds the POST request from the cache", function (done) {
       request.post({uri: "http://httpbin.org/post", body: "Some random POST data"}, function (error, response, body) {
         expect(JSON.parse(body).data).to.equal("Some random POST data");
-        //done();
+        done();
       });
     });
   });
