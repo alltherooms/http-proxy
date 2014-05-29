@@ -10,7 +10,7 @@ var HttpProxy = require("http-proxy");
 httpProxy = new HttpProxy({
   cache: {
     enabled: true, //defaults to false (no caching)
-    path: "/path/to/cache/dir", (if enabled == true, this path must be specified, otherwise, an Error will be thrown. 
+    path: "/path/to/cache/dir", //if `enabled` was set to true, this path must be specified, otherwise, an Error will be thrown. 
     ttl: 60000 //cache TTL
   }
 });
