@@ -69,15 +69,17 @@ describe("HttpProxy", function () {
       nock.enableNetConnect("localhost"); //Enable http request to proxy only
     });
 
-    it("responds the GET request from the cache", function (done) {
+    it("responds the GET request from the cache with appropriate headers", function (done) {
       request.get("http://httpbin.org/get", function (error, response, body) {
+        expect(response.headers["content-type"]).to.equal("application/json");
         expect(JSON.parse(body).url).to.equal("http://httpbin.org/get");
         done();
       });
     });
 
-    it("responds the POST request from the cache", function (done) {
+    it("responds the POST request from the cache with appropriate headers", function (done) {
       request.post({uri: "http://httpbin.org/post", body: "Some random POST data"}, function (error, response, body) {
+        expect(response.headers["content-type"]).to.equal("application/json");
         expect(JSON.parse(body).data).to.equal("Some random POST data");
         done();
       });
