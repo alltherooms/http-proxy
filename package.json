@@ -14,11 +14,13 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha"
   },
+  "dependencies": {
+    "request": "^2.36.0"
+  },
   "devDependencies": {
     "chai": "^1.9.1",
     "execSync": "^1.0.1-pre",
     "mocha": "^1.20.0",
-    "nock": "^0.32.3",
-    "request": "^2.36.0"
+    "nock": "^0.32.3"
   }
 }

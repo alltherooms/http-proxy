@@ -1,6 +1,6 @@
 #http-proxy
 
-HTTP proxy with caching support
+Chainable HTTP proxy with caching support
 
 ##Usage
 
@@ -8,12 +8,13 @@ HTTP proxy with caching support
 var HttpProxy = require("http-proxy");
 
 httpProxy = new HttpProxy({
+  auth: "user:password", //Authorization credentials. Defaults to undefined (no authorization required)
   cache: {
     enabled: true, //defaults to false (no caching)
-    path: "/path/to/cache/dir", //if `enabled` was set to true, this path must be specified, otherwise, an Error will be thrown. 
+    path: "/path/to/cache/dir", //if `enabled` was set to true, this path must be specified, otherwise, an Error will be thrown.
     ttl: 60000 //cache TTL
   },
-  auth: "user:password" //Authorization credentials. Defaults to undefined (no authorization required)
+  proxy: "http://some.other.proxy:8181" //Other proxy to chain to
 });
 
 httpProxy.listen(8080);
