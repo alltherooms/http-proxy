@@ -129,6 +129,15 @@ describe("HttpProxy", function () {
     });
   });
 
+  describe("errors", function () {
+    it("handles errors properly", function (done) {
+      request.get("http://unexistingdomain.com/unexistingpath", function (error, response, body) {
+        expect(response.statusCode).to.equal(500);
+        done();
+      })
+    })
+  })
+
   after(function () {
     //Remove cache directory
     sh.run("rm -rf " + cachePath);
