@@ -14,7 +14,8 @@ httpProxy = new HttpProxy({
     path: "/path/to/cache/dir", //if `enabled` was set to true, this path must be specified, otherwise, an Error will be thrown.
     ttl: 60000 //cache TTL
   },
-  proxy: "http://some.other.proxy:8181" //Other proxy to chain to
+  proxy: "http://some.other.proxy:8181", //Other proxy to chain to
+  maxSockets: 100 //http://nodejs.org/api/http.html#http_agent_maxsockets, defaults to Infinity
 });
 
 httpProxy.listen(8080);
