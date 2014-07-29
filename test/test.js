@@ -15,6 +15,8 @@ describe("HttpProxy", function () {
     sh.run("rm -rf " + cachePath);
     //Create cache directory
     sh.run("mkdir " + cachePath);
+    //Silent all HttpProxy instances
+    HttpProxy.prototype.log = function () {};
   });
 
   describe("behaviors", function () {
@@ -256,15 +258,13 @@ describe("HttpProxy", function () {
       it("calls back with false when the file isn't stale", function (done) {
         var self = this;
         this.httpProxy.cache.ttl = 100;
-        fs.writeFileSync(cachePath + "/fresh.txt", "stale");
+        fs.writeFileSync(cachePath + "/fresh.txt", "fresh");
 
-        setTimeout(function () {
-          self.httpProxy.isFileStale(cachePath + "/fresh.txt", function (error, isStale) {
-            expect(error).to.not.exist;
-            expect(isStale).to.equal(true);
-            done();
-          });
-        }, 50);
+        self.httpProxy.isFileStale(cachePath + "/fresh.txt", function (error, isStale) {
+          expect(error).to.not.exist;
+          expect(isStale).to.equal(true);
+          done();
+        });
       });
     });
 
