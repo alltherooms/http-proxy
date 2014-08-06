@@ -257,12 +257,12 @@ describe("HttpProxy", function () {
 
       it("calls back with false when the file isn't stale", function (done) {
         var self = this;
-        this.httpProxy.cache.ttl = 100;
+        this.httpProxy.cache.ttl = 1000;
         fs.writeFileSync(cachePath + "/fresh.txt", "fresh");
 
         self.httpProxy.isFileStale(cachePath + "/fresh.txt", function (error, isStale) {
           expect(error).to.not.exist;
-          expect(isStale).to.equal(true);
+          expect(isStale).to.equal(false);
           done();
         });
       });
