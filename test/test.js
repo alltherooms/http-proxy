@@ -134,6 +134,20 @@ describe("HttpProxy", function () {
       });
     });
 
+    describe("timeout", function () {
+      it("responds with a timeout error", function (done) {
+        request.get({
+          uri: "http://httpbin.org/delay/5",
+          headers: {
+            "proxy-timeout": 1000
+          }
+        }, function (error, response, body) {
+          expect(response.statusCode).to.equal(504);
+          done();
+        });
+      });
+    });
+
     describe("errors", function () {
       it("handles errors properly", function (done) {
         request.get("http://unexistingdomain.com/unexistingpath", function (error, response, body) {
