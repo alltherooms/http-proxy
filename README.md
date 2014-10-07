@@ -57,9 +57,8 @@ request(options, function (error, response, body) {
     console.log(error); //-> undefined
   };
 });
-
+```
 Please note that when a timeout occurs in the upstream server, no error will be thrown by the `request` module in userland, all that happens is the proxy server responds with `504 (Gateway timeout error)` which means: _The server was acting as a gateway or proxy and did not receive a timely response from the upstream server._
-````
 
 ##Testing
 
