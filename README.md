@@ -4,6 +4,8 @@ Chainable HTTP proxy with caching support
 
 ##Usage
 
+###Launch proxy servers programmatically
+
 ```javascript
 var HttpProxy = require("http-proxy");
 
@@ -20,6 +22,18 @@ httpProxy = new HttpProxy({
 
 httpProxy.listen(8080);
 ```
+
+###Launch proxy servers from the command line
+
+```
+$ node app.js --port 8080 --auth user:password --cluster
+```
+
+The options are:
+
+- `--port` Port to listen to. By default a random port will be assigned.<br/>
+- `--auth` Username and password. By default no authentication will be configured.<br/>
+- `--cluster` If present, the proxy server will be clustered according to the number of available CPU cores.
 
 ##Testing
 

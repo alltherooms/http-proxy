@@ -5,7 +5,7 @@
   },
   "name": "http-proxy",
   "description": "AllTheRooms' HTTP proxy with caching functionalities",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "repository": {
     "type": "git",
     "url": "git://github.com/alltherooms/http-proxy.git"
@@ -18,7 +18,7 @@
     "async": "^0.9.0",
     "cron": "^1.0.4",
     "graceful-fs": "^3.0.1",
-    "request": "^2.36.0",
+    "request": "^2.45.0",
     "time": "^0.11.0"
   },
   "devDependencies": {
