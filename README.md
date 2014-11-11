@@ -18,6 +18,7 @@ httpProxy = new HttpProxy({
 
 httpProxy.listen(8080, function () {
   //Listening...
+  console.log(httpProxy.server.address().port); //8080
 });
 ```
 
