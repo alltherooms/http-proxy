@@ -4,8 +4,8 @@
     "email": "danypype@gmail.com"
   },
   "name": "http-proxy",
-  "description": "AllTheRooms' HTTP proxy with caching functionalities",
-  "version": "0.1.9",
+  "description": "AllTheRooms' HTTP proxy",
+  "version": "0.1.10",
   "repository": {
     "type": "git",
     "url": "git://github.com/alltherooms/http-proxy.git"
