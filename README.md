@@ -13,6 +13,7 @@ httpProxy = new HttpProxy({
   auth: "user:password", //Authorization credentials. Defaults to undefined (no authorization required)
   proxy: "http://some.other.proxy:8181", //Other proxy to chain to
   maxSockets: 100 //http://nodejs.org/api/http.html#http_agent_maxsockets
+  localAddress: "192.168.1.62" //http://nodejs.org/api/http.html#http_http_request_options_callback
 });
 
 httpProxy.listen(8080, function () {
@@ -28,10 +29,11 @@ httpProxy.listen(8080, function () {
 
 The options are:
 
+- `--auth` Authorization credentials. Defaults to undefined (no authorization required).<br/>
 - `--proxy` Other proxy to chain to.<br/>
 - `--maxSockets` Override Node.js' HTTPAgent `maxSockets`. Defaults to Node.js' default value _(5)_<br/>
+- `--localAddress` Local interface to bind for network connections.<br/>
 - `--port` Port to listen to. By default a random port will be assigned.<br/>
-- `--auth` Authorization credentials. Defaults to undefined (no authorization required).<br/>
 - `--cluster` If present, the proxy server will be clustered according to the number of available CPU cores.
 
 ##Testing

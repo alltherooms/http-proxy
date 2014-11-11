@@ -6,10 +6,11 @@ var argv = require("minimist")(process.argv)
 ,   port = 0
 ,   httpProxy;
 
+if (argv.auth) options.auth = argv.auth;
 if (argv.proxy) options.proxy = argv.proxy;
 if (argv.maxSockets) options.maxSockets = argv.maxSockets;
+if (argv.localAddress) options.localAddress = argv.localAddress;
 if (argv.port) port = argv.port;
-if (argv.auth) options.auth = argv.auth;
 
 if (!argv.cluster) {
   httpProxy = new HttpProxy(options);
