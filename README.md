@@ -13,6 +13,7 @@ httpProxy = new HttpProxy({
   auth: "user:password", //Authorization credentials. Defaults to undefined (no authorization required)
   proxy: "http://some.other.proxy:8181", //Other proxy to chain to
   maxSockets: 100 //http://nodejs.org/api/http.html#http_agent_maxsockets
+  requestTimeout: 60000 //number of milliseconds to wait before aborting the request
   localAddress: "192.168.1.62" //http://nodejs.org/api/http.html#http_http_request_options_callback
 });
 
