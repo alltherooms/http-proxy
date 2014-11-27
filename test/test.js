@@ -104,7 +104,8 @@ describe("HttpProxy", function () {
     describe("errors", function () {
       it("handles errors properly", function (done) {
         request.get("http://unexistingdomain.com/unexistingpath", function (error, response, body) {
-          expect(response.statusCode).to.equal(500);
+          //502 Bad Gateway
+          expect(response.statusCode).to.equal(502);
           done();
         })
       })
