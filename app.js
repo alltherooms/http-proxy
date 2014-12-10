@@ -10,6 +10,7 @@ if (argv.auth) options.auth = argv.auth;
 if (argv.proxy) options.proxy = argv.proxy;
 if (argv.maxSockets) options.maxSockets = argv.maxSockets;
 if (argv.localAddress) options.localAddress = argv.localAddress;
+if (argv.followRedirect) options.followRedirect = argv.followRedirect;
 if (argv.port) port = argv.port;
 
 if (!argv.cluster) {
