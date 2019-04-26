@@ -1,46 +1,42 @@
 var HttpProxy = require("../")
-,   cachePath = __dirname + "/cache"
-,   cacheTtl = 1000 * 60 * 10//10 minutes
-,   sh = require("execSync")
 ,   nock = require("nock")
-,   fs = require("fs")
 ,   request = require("request").defaults({
       proxy: "http://test:test@localhost:8181"
     });
 
 describe("HttpProxy", function () {
-  before(function () {
-    //Silent all HttpProxy instances
-    HttpProxy.prototype.log = function () {};
-  });
-
   describe("behaviors", function () {
     before(function () {
       //Crate proxy first server
-      var httpProxy = new HttpProxy({
+      this.httpProxy = new HttpProxy({
         auth: "test:test"
       });
-      httpProxy.listen(8181);
+      this.httpProxy.listen(8181);
 
       //Crate second proxy server (this is chained with the fist one)
-      var chainedProxy = new HttpProxy({
+      this.chainedProxy = new HttpProxy({
         proxy: "http://test:test@localhost:8181"
       });
-      chainedProxy.listen(8282);
+      this.chainedProxy.listen(8282);
+    });
+
+    after(function () {
+      this.httpProxy.server.close();
+      this.chainedProxy.server.close();
     });
 
     describe("proxying", function () {
       describe("http", function () {
         it("proxies GET requests properly", function (done) {
-          request.get("http://httpbin.org/get", function (error, response, body) {
+          request.get("https://httpbin.org/get", function (error, response, body) {
             expect(response.headers["content-type"]).to.equal("application/json");
-            expect(JSON.parse(body).url).to.equal("http://httpbin.org/get");
+            expect(JSON.parse(body).url).to.equal("https://httpbin.org/get");
             done();
           });
         });
 
         it("proxies POST requests properly", function (done) {
-          request.post({uri: "http://httpbin.org/post", body: "Some random POST data"}, function (error, response, body) {
+          request.post({uri: "https://httpbin.org/post", body: "Some random POST data"}, function (error, response, body) {
             expect(response.headers["content-type"]).to.equal("application/json");
             expect(JSON.parse(body).data).to.equal("Some random POST data");
             done();
@@ -69,9 +65,9 @@ describe("HttpProxy", function () {
 
     describe("Chaining", function () {
       it("proxies GET requests all the way through the chain", function (done) {
-        request.get({uri: "http://httpbin.org/get", proxy: "http://localhost:8282"}, function (error, response, body) {
+        request.get({uri: "https://httpbin.org/get", proxy: "http://localhost:8282"}, function (error, response, body) {
           expect(response.headers["content-type"]).to.equal("application/json");
-          expect(JSON.parse(body).url).to.equal("http://httpbin.org/get");
+          expect(JSON.parse(body).url).to.equal("https://httpbin.org/get");
           done();
         });
       });
@@ -87,7 +83,7 @@ describe("HttpProxy", function () {
 
     describe("authorization", function () {
       it("responds with 401 (unhautorized) code for http requests", function (done) {
-        request.get({uri: "http://httpbin.org/get", proxy: "http://wrong:wrong@localhost:8181"}, function (error, response, body) {
+        request.get({uri: "https://httpbin.org/get", proxy: "http://wrong:wrong@localhost:8181"}, function (error, response, body) {
           expect(response.statusCode).to.equal(401);
           done();
         });
@@ -111,7 +107,7 @@ describe("HttpProxy", function () {
       })
     });
 
-    describe("Concurrency", function () {
+    describe.only("Concurrency", function () {
       before(function () {
         this.response = "";
         this.n = 1000;
@@ -136,26 +132,31 @@ describe("HttpProxy", function () {
         nock.enableNetConnect("localhost");
       });
 
-      function testCaseForConcurrency (protocol, response, numRequests, done) {
-        var completed = 0;
-
-        for (var i = 0; i < numRequests; i++) {
-          request.get(protocol + "://myserver.com/" + i, function (error, res, body) {
-            expect(body).to.equal(response);
-            if (++completed == numRequests) {
-              done();
-            };
+      function _request(url) {
+        return new Promise((resolve, reject) => {
+          const req = request.get(url, function (error, res, body) {
+            if (error) return reject(error);
+            resolve({ req, res, body });
           });
-        };
+        });
+      }
+
+      function testCaseForConcurrency(protocol, response, numRequests) {
+        return Promise.all(
+          [...Array(numRequests).keys()].map((i) => {
+            return _request(protocol + "://myserver.com/" + i)
+              .then(({ body }) => expect(body).to.equal(response));
+          }, Promise.resolve())
+        );
       };
 
-      it("Handles concurrency of http requests", function (done) {
-        testCaseForConcurrency("http", this.response, this.n, done);
+      it("Handles concurrency of http requests", function () {
+        return testCaseForConcurrency("http", this.response, this.n);
       });
 
-      it("Handles concurrency of https requests", function (done) {
-        testCaseForConcurrency("https", this.response, this.n, done);
-      });
+      // it("Handles concurrency of https requests", function () {
+      //   return testCaseForConcurrency("https", this.response, this.n);
+      // });
     });
 
     describe("Aborting requests", function () {
